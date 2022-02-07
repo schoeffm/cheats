@@ -1,0 +1,8 @@
+# resets the offsets of the given consumer-group (see 'kafka-console-consumer' for reading)
+kafka-consumer-groups 
+    --bootstrap-server $1 
+    --group $2 
+    --reset-offsets 
+    --to-earliest 
+    --all-topics 
+    --execute                   # necessary to apply the changes

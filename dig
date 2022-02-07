@@ -1,0 +1,23 @@
+# general format of a dig command
+# type: A, CNAME, ANY, SIG (default is A)
+# server: the DNS server to be used (i.e. @8.8.8.8)
+#         (default is in /etc/resolv.conf)
+dig @server type name
+
+# -x make a reverse DNS query
+dig -x 172.217.13.174
+# ... which is the same as:
+dig ptr 172.217.13.174.in-addr.arpa.
+
+# to make digs output more digestable
+dig +noall +answer google.de
+
+# shows you the way to the answering DNS resolver
+dig +trace lkc-98d2y-e0d05.westeurope.azure.glb.confluent.cloud
+
+# dig does recursive requests by default (except when using +trace
+# where it uses iterative approach)
+dig +norecurse e-0011-az2-em2rw.westeurope.azure.glb.confluent.cloud
+
+# requests just the CNAME record
+dig e-0011-az2-em2rw.westeurope.azure.glb.confluent.cloud CNAME

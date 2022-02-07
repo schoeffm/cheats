@@ -1,0 +1,16 @@
+# set env/cluster for all further commands
+confluent environment list                  # find the env to be used
+confluent environment use env-3po52         # pin an env
+confluent kafka cluster list                # next, find all cluster in that env
+confluent kafka cluster use lkc-98d2y       # ...and pin one cluster
+
+# set an api-key to be used in subsequent commands
+confluent api-key list --service-account sa-811r00  # list all api-keys for a SA
+confluent api-key store [api-key] [secret]          # store a key/secret pair
+confluent api-key use <api-key> \                   # set the key (with its resource-id)
+    --resource <resource-id>                        # ..to be used in commands like consume
+
+
+# reads all messages from a topic from the beginning
+# in our env you'd have to set the env, cluster and api-key first
+confluent kafka topic consume --group bmw.psbomhub.testgroup --from-beginning bmw.psbomhub.test

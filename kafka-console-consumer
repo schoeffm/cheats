@@ -1,0 +1,7 @@
+# read the (internal) consumer-offset topic and use the internal formatter
+kafka-console-consumer 
+    --formatter "kafka.coordinator.group.GroupMetadataManager\$OffsetsMessageFormatter" 
+    --bootstrap-server <BOOTSTRAP-SERVER>
+    --topic __consumer_offsets 
+    --from-beginning
+

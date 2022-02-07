@@ -1,0 +1,17 @@
+# Traceroute sends packets with a fixed TTL - each router decreases the TTL by one until if finally reaches 0
+# At that point the router sends back an error (along with its IP-address and possibly further infos). That's
+# how traceroute gathers information about each hop - probing with TTL 1, TTL 2, TTL 3 ... until you reach 
+# your destination (or reach max-TTL hops).
+
+# -T: use TCP SYN packages instead of ICMP (useful in azure where ICMP is not supported)
+# -p: use port 1789 (instead of the default port 80 - only sensible when using -T)
+# -O: also print some more information than usual
+# -q: do 5 probes per TTL (instead of the default 3)
+traceroute -T -O info -q 5 -d -p 1789  10.9.65.4
+
+# -f: first TTL hop to start with (default is 1) - here we skip the first 5 round-trips
+# -m: max TTL hops to try (default is 30) - here we stop after the 10th hop
+traceroute -T -O info -f 5 -m 10 10.9.65.4
+
+# -w: we wait up to 2 seconds for each hops to return the routes IP
+traceroute -T -O info -w 2 10.9.65.4

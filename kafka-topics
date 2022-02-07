@@ -1,0 +1,5 @@
+# list all topics
+kafka-topics --bootstrap-server 10.11.76.135:30416 --list 
+
+# delete a specific topic
+kafka-topics --bootstrap-server 10.11.76.135:30416 --delete --topic bmw_poc_input

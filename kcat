@@ -1,0 +1,26 @@
+# explicitly providing the bootstrap-server to connect to
+kcat -b localhost:9092 -C -t test.topic
+
+# -F <path-to-config> will use those configs to connect (so you don't have to provide all props as options)
+# -L list metadata about that specific topic (like leader, partitions etc.)
+kcat -F ~/.config/kcat.config -L -t bmw.psbombb.positions.v1.allplants
+
+# -C consume from the beginning
+kcat -F ~/.config/kcat.config -C -t bmw.psbombb.positions.v1.allplants
+
+# -K defines the key-value-delimiter
+kcat -F ~/.config/kcat.config -C -t bmw.psbombb.positions.v1.allplants -K ,
+
+# with -X you can set all props manually (but that's tedious - use -F configs instead)
+kcat -b lkc-98d2y-e0d05.westeurope.azure.glb.confluent.cloud:9092 \
+    -X ssl.endpoint.identification.algorithm=https \
+    -X security.protocol=SASL_SSL -X sasl.mechanisms=PLAIN \
+    -X sasl.username=<API_KEY> \
+    -X sasl.password=<SECRET> \
+    -C -t bmw.psbomhub.test
+
+# consumer mode (writes to stdout)
+kcat -C -b <broker> -t <topic> -p <partition>
+
+# don't read _all_ messages but only 10
+kcat -F ~/.config/kcat.config -C -t bmw.psbombb.positions.v1.allplants -c 10

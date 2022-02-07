@@ -1,0 +1,48 @@
+# ------------- Policies ---------------
+
+# Trigger the execution/evaluation of a policy ritht now
+az policy state trigger-scan --resource-group picoptest-kaas-resources
+
+# ------------- AKS ---------------
+
+# get credentials for a kubernetes cluster (as admin - overwrite any existing kubeconfig entries)
+az aks get-credentials -g <GROUP-NAME> -n <CLUSTER-NAME> --overwrite --admin
+
+# Run a command on a specific node of a nodepool 
+az vmss run-command invoke -g <MC_RG> -n vmss-name --command-id RunShellScript \
+    --instance-id 0 --query 'value[0].message' -otsv \
+    --scripts "nc -zv -w2 dc.services.visualstudio.com 443"
+
+# ------------- Role Mgmt ---------------
+
+# find the unique ID of a user
+az ad user show --id Stefan.Schoeffmann@bmw.de
+
+# find the unique ID of a service-principal
+az ad sp show --id 42ca0e2b-6176-47ad-8e76-1325fb7b9c03
+
+# check if that group was federated already
+az ad group member list --group APPL_WIZARD_TEAM
+
+# get the objectId of a specific user (here for my own)
+az ad user show --id Stefan.Schoeffmann@bmw.de --query objectId -o tsv
+
+# assign a SP the 'Owern'-role for a subscription
+az role assignment create --scope /subscriptions/fca564c9-6b4e-4ece-87db-49cba4e01a9f \
+    --assignee e9b0edde-fd35-4af6-87c4-20b5281ddddc --role "Owner"
+
+# list the assigned roles of a user
+az role assignment list --all --assignee Stefan.Schoeffmann@bmw.de
+
+# ------------- Lock Mgmt ---------------
+# list existing locks (table output doesn't show ID)
+az lock list [-o table]
+
+# delete an existing lock (by id)
+az lock delete --ids <ID>
+
+# re-create the original lock
+az lock create --name "bomk8stest.azure.cloud.bmwLock" -t CanNotDelete --resource-group "Group-DNS"
+
+# re-create the VNET-Lock
+az lock create --name IAM-Concept-Lock -t CanNotDelete --resource-group Group-AMS-VNET-82 --resource-type Microsoft.Network/virtualNetworks --resource-name VNET-bmwFGProd-82

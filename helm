@@ -1,0 +1,27 @@
+# to extract/look into the i.e. the variables of a chart
+helm inspect [all|chart|readme|values] chart_name
+
+# searches either in the helm hub or in a known repo for the given word
+helm search [hub|repo] keyword 
+# to look for the current version in the repo
+helm search repo ingress-nginx/ingress-nginx
+
+# Installs a chart under the given release-name
+helm install [release] [chart] 
+# dry-run to test a release and investigate the result
+helm install [release] [chart] --debug --dry-run 2>&1 | less
+
+# Upgrade a released version of a specific chart
+helm upgrade [release] [chart]
+
+# Roll a release back to a previous version
+helm rollback [release] [revision]
+
+# Print the history of a release
+helm history [release]
+
+# Display the release status
+helm status [release]
+
+# List releases (in the default namespace)
+helm list -n default
