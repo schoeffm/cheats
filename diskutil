@@ -1,0 +1,14 @@
+# identify/list current connected disks
+diskutil list
+
+# unmount a disk (i.e. just before copying a new image to it)
+diskutil unmountDisk /dev/disk<# from diskutil>
+
+# copy an image to a specific disk
+sudo dd bs=1m if=image.img of=/dev/rdisk<# from diskutil>
+
+# whole workflow to copy a disk-image to a sd-card
+diskutil list
+diskutil unmountDisk /dev/disk<# from diskutil>
+sudo dd bs=1m if=image.img of=/dev/rdisk<# from diskutil>
+diskutil unmountDisk /dev/disk<# from diskutil>

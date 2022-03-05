@@ -24,3 +24,6 @@ kcat -C -b <broker> -t <topic> -p <partition>
 
 # don't read _all_ messages but only 10
 kcat -F ~/.config/kcat.config -C -t bmw.psbombb.positions.v1.allplants -c 10
+
+# read a protobuf encoded messages based on a given schema
+kcat -F ~/.config/kcat.int.config -C -t bmw.psbombb.positions.v1.allplants -c 1 -D "" | protoc --decode=psbombb.PositionVariantMessage --proto_path=./ ./psbombb_22_02_2022.proto

@@ -1,0 +1,25 @@
+# learning by doin ': htp://ffuf.me
+
+# use the given wordlist and test all resulting URL by replacing 'FUZZ'
+ffuf -w ./wordlist/common.txt -u http://ffuf.me/cd/basic/FUZZ
+
+# same command but this time we go further and further down the dir-hirarchie
+ffuf -w ./wordlist/common.txt -recursion -u http://ffuf.me/cd/recursion/FUZZ
+
+# find files that have .log file-ending (by adding the given ending to every word in the wordlist)
+ffuf -w ./wordlist/common.txt -e .log -u http://ffuf.me/cd/ext/logs/FUZZ
+
+# filters out responses of 669 bytes - handy when i.e. the webserver doesn't return proper status (but a not-found 
+# body with a 200 response-status) - you can skip those results that all have the same size
+ffuf -w ./wordlist/common.txt -u http://ffuf.me/cd/no404/FUZZ -fs 669
+
+# use a wordlist for parameter fuzzing
+ffuf -w ./wordlist/parameters.txt -u http://ffuf.me/cd/param/data\?FUZZ\=1
+
+# to work around rate limiting we're using 5 parallel instances and pause each request for 0.1 seconds (to throttle 
+# the speed) - also, we only output the response with code 200,429
+ffuf -w ./wordlist/common.txt -u http://ffuf.test/cd/rate/FUZZ -mc 200,429 -t 5 -p 0.1
+
+# we can also fuzz for virtual hosts (subdomains) - we exclude error-responses (of size 1495) to reduce the noise
+# (to know what size has to be filtered out ... have a try without -fs)
+ffuf -w ./wordlist/subdomains.txt -H "Host: FUZZ.ffuf.me" -u http://ffuf.me -fs 1495

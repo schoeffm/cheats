@@ -27,6 +27,10 @@ az ad group member list --group APPL_WIZARD_TEAM
 # get the objectId of a specific user (here for my own)
 az ad user show --id Stefan.Schoeffmann@bmw.de --query objectId -o tsv
 
+# assign a user the 'Owner'-role (my user specifically)    
+az role assignment create --scope /subscriptions/fca564c9-6b4e-4ece-87db-49cba4e01a9f \
+    --assignee 286d629d-1fc4-421d-89c6-22351cc184ad --role "Owner"
+
 # assign a SP the 'Owern'-role for a subscription
 az role assignment create --scope /subscriptions/fca564c9-6b4e-4ece-87db-49cba4e01a9f \
     --assignee e9b0edde-fd35-4af6-87c4-20b5281ddddc --role "Owner"
@@ -46,3 +50,9 @@ az lock create --name "bomk8stest.azure.cloud.bmwLock" -t CanNotDelete --resourc
 
 # re-create the VNET-Lock
 az lock create --name IAM-Concept-Lock -t CanNotDelete --resource-group Group-AMS-VNET-82 --resource-type Microsoft.Network/virtualNetworks --resource-name VNET-bmwFGProd-82
+
+# -------------- UDRs ----------------------
+# changing/adding UDR for a BMW-peered VNET requires Owner-Role!!
+az network route-table list -o table 
+az network route-table route list --route-table-name azureglobal -g group-ams-vnet-76 -o table
+az network route-table route create --route-table-name azureglobal -g group-ams-vnet-76 --next-hop-type Internet --name HDInsight-WestEurope-9 --address-prefix 2603:1020:206:402::320/124

@@ -1,0 +1,30 @@
+# Copy image to sd-card
+diskutil list                                               # in order to identify the disk
+diskutil unmountDisk /dev/disk<# from diskutil>             # unmount the SD-card
+sudo dd bs=1m if=image.img of=/dev/rdisk<# from diskutil>   # copy everything over 
+diskutil unmountDisk /dev/disk<# from diskutil>             # unmound it again
+
+# Add a user
+adduser schoeffm                                            # will create a new user
+adduser schoeffm sudo                                       # will add the given user to the sudo-ers list
+usermod -a -G video schoeffm                                # in order to be in the raspistill group
+# use 
+sudo visudo 
+# and add 
+schoeffm ALL=(ALL) NOPASSWD: ALL 
+# to allow sudo without password
+
+# Activate SSH (headless setup)
+touch /Volumes/boot/ssh                    # create an empty marker-file in rootfs (assuming it's mounted to a Mac). 
+# Once the pi is up use 
+ssh pi@raspberry
+
+# Setting up WiFi
+touch /Volumes/boot/wpa_supplicant.conf                     # create a config-file in the rootfs
+# add the followin to the file
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+network={
+    ssid="YOUR_NETWORK_NAME"
+    psk="YOUR_PASSWORD"
+    key_mgmt=WPA-PSK
+}
